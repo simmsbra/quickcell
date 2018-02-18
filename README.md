@@ -11,18 +11,19 @@ QuickCell is an implementation of the single-player card game FreeCell. It place
 
 ## Running
 - Linux
-  1. Install python3, which comes with curses.
-  2. Download the source files.
-  3. Run the program.
+  1. Install python3, which comes with curses, through your package manager.
+  2. Download this quickcell repository.
+  3. Move to the src directory.
+  4. Run the program.
      - `python3 quickcell.py` to play a random deal
      - `python3 quickcell.py 399677` to play, for example, game 399677 (this can be used to replay deals)
 - Windows
-  - curses is not supported. One could always use a Linux virtual machine or LiveCD/USB, however.
+  - curses, a required library, is not present.
+  - To play, you can use a Linux LiveCD/USB or virtual machine.
 
 ## Author
 This project was created by Brandon Simmons.
 
 ## Thanks
-Thank you Michael Keller for creating the FreeCell FAQ at:
-<http://solitairelaboratory.com/fcfaq.html>
+Thank you Michael Keller for creating the [FreeCell FAQ](http://solitairelaboratory.com/fcfaq.html).
 The last question of section 2, about cards automatically moving home, was particularly helpful.
