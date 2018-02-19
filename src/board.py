@@ -106,7 +106,7 @@ class Board:
                     stack_index = i
                     break
             else:
-                raise Exception('There are no cards that can move to that row.')
+                raise Exception('The card(s) in the origin row cannot sit on the destination row.')
             if self.calc_move_capacity(to_row) < (len(from_row.cards) - stack_index):
                 raise Exception('There are not enough open slots to move that stack.')
         tmp = from_row.view(stack_index)
