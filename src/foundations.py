@@ -11,7 +11,12 @@ class Foundations:
         pos = window.getyx()
         for i, found in enumerate(self.founds):
             window.move(pos[0] + i, pos[1])
-            label = '9 ' if i == 0 else '| '
+            if i == 0:
+                label = '9 '
+            elif i == 3:
+                label = '┗ '
+            else:
+                label = '┃ '
             window.addstr(label)
             found.show(window)
         window.move(*pos)

@@ -51,7 +51,12 @@ class Board:
         pos = window.getyx()
         for i, cell in enumerate(self.cells):
             window.move(pos[0] + i, pos[1])
-            label = '0 ' if i == 0 else '| '
+            if i == 0:
+                label = '0 '
+            elif i == 3:
+                label = '┗ '
+            else:
+                label = '┃ '
             window.addstr(label)
             cell.show(window)
         window.move(*pos)
