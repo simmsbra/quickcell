@@ -56,6 +56,7 @@ class Board:
             cell.show(window)
         window.move(*pos)
 
+    # display a highlighted index (location) number for each cell
     def show_cell_nums(self, window):
         pos = window.getyx()
         for i in range(4):

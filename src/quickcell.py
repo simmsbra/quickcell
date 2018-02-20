@@ -1,6 +1,7 @@
 import curses
 from board import Board
 
+# set curses colors and run the main game loop
 def main(stdscr):
     curses.init_pair(1, curses.COLOR_WHITE,   curses.COLOR_BLACK)
     curses.init_pair(2, curses.COLOR_GREEN,   curses.COLOR_BLACK)
@@ -34,6 +35,7 @@ def main(stdscr):
             stdscr.addstr(str(problem))
             stdscr.getkey()
 
+# get user input until a valid command is constructed then return it
 def get_command(window, board):
     window.addstr('>')
     cmd = get_char(window, 0, 8, letters=True)
@@ -44,6 +46,7 @@ def get_command(window, board):
         cmd += get_char(window, 0, 9)
     return cmd
 
+# get valid characters (may include letters) from user
 def get_char(window, nmin, nmax, letters=False):
     while True:
         char = window.getkey()
