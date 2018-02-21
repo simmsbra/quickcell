@@ -7,20 +7,6 @@ class Foundations:
         for suit in ['clubs', 'spades', 'hearts', 'diamonds']:
             self.founds.append(Card(suit, 0))
 
-    def show(self, window):
-        pos = window.getyx()
-        for i, found in enumerate(self.founds):
-            window.move(pos[0] + i, pos[1])
-            if i == 0:
-                label = '9 '
-            elif i == 3:
-                label = '┗ '
-            else:
-                label = '┃ '
-            window.addstr(label)
-            found.show(window)
-        window.move(*pos)
-
     # determine whether given card can be placed into self
     def can_accept(self, card):
         for found in self.founds:

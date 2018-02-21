@@ -38,27 +38,28 @@ class Board:
             self.cells.append(Cell())
 
     def show(self, window):
-        self.show_cells(window)
+        self.show_bank(window, self.cells)
         window.move(4, 0)
-        self.founds.show(window)
+        self.show_bank(window, self.founds.founds)
         for i, cascade in enumerate(self.cascades):
             window.move(i, 3)
             window.addstr(' {} '.format(i + 1))
             cascade.show(window, self.founds)
         window.addstr('\n\nGame: {:6}\n'.format(self.seed))
 
-    def show_cells(self, window):
+    # displays either the foundation bank or the cell bank
+    def show_bank(self, window, bank):
         pos = window.getyx()
-        for i, cell in enumerate(self.cells):
+        for i, unit in enumerate(bank):
             window.move(pos[0] + i, pos[1])
             if i == 0:
-                label = '0 '
+                label = '0 ' if type(bank[0]) == Cell else '9 '
             elif i == 3:
                 label = '┗ '
             else:
                 label = '┃ '
             window.addstr(label)
-            cell.show(window)
+            unit.show(window)
         window.move(*pos)
 
     # display a highlighted index (location) number for each cell
