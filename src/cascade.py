@@ -1,5 +1,6 @@
 from card import Card
 
+
 class Cascade:
     def __init__(self, cards):
         self.cards = cards

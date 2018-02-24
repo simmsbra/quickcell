@@ -9,6 +9,7 @@ from foundations import Foundations
 
 suits = ['clubs', 'spades', 'hearts', 'diamonds']
 
+
 class Board:
     def __init__(self):
         deck = []
@@ -24,7 +25,7 @@ class Board:
         # Fill the cascades with the shuffled deck of cards
         self.cascades = []
         place = 0
-        for c in range (8):
+        for c in range(8):
             if c <= 3:
                 end = place + 7
             else:
@@ -90,7 +91,7 @@ class Board:
                 break
             except IndexError:
                 raise
-            except:
+            except Exception:
                 continue
         else:
             raise Exception('The cells are full.')
@@ -99,7 +100,7 @@ class Board:
         from_row = self.cascades[orig]
         to_row = self.cascades[dest]
 
-        from_row.view() #makes sure it's not empty
+        from_row.view()  # makes sure it's not empty
 
         stack_index = from_row.stack_index
         if to_row.is_empty():
@@ -143,14 +144,14 @@ class Board:
                     if self.founds.should_accept(self.cells[i].view()):
                         self.cell_to_foundations(i)
                         has_moved = True
-                except:
+                except Exception:
                     pass
             for i in range(8):
                 try:
                     if self.founds.should_accept(self.cascades[i].view()):
                         self.row_to_foundations(i)
                         has_moved = True
-                except:
+                except Exception:
                     pass
             if not has_moved:
                 break

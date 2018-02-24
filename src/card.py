@@ -1,5 +1,6 @@
 import curses
 
+
 class Card:
     def __init__(self, suit, rank):
         self.suit = suit
@@ -20,7 +21,7 @@ class Card:
             faces = 'A234567890JQK'
             char = faces[self.rank - 1]
         attr = color
-        if (founds != None) and (founds.should_accept(self)):
+        if (founds is not None) and (founds.should_accept(self)):
             attr = attr | curses.A_REVERSE
         window.addstr(char, attr)
 

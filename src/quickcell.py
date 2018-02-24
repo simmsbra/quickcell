@@ -1,6 +1,7 @@
 import curses
 from board import Board
 
+
 # set curses colors and run the main game loop
 def main(stdscr):
     curses.init_pair(1, curses.COLOR_WHITE,   curses.COLOR_BLACK)
@@ -35,6 +36,7 @@ def main(stdscr):
             stdscr.addstr(str(problem))
             stdscr.getkey()
 
+
 # get user input until a valid command is constructed then return it
 def get_command(window, board):
     window.addstr('>')
@@ -46,6 +48,7 @@ def get_command(window, board):
         cmd += get_char(window, 0, 9)
     return cmd
 
+
 # get valid characters (may include letters) from user
 def get_char(window, nmin, nmax, letters=False):
     while True:
@@ -56,6 +59,7 @@ def get_char(window, nmin, nmax, letters=False):
             break
     window.addstr(char)
     return char
+
 
 def show_help(window):
     window.addstr('Color Groups:\n')
@@ -71,6 +75,7 @@ def show_help(window):
     window.addstr("Destinations: 1-8 for cascades; 0 for the cells; 9 for the foundations\n")
     window.addstr("\nStacks of cards will be handled automatically. Note: If you do not want the largest moveable stack to move to an empty cascade, simply move the cards manually using the cells.\n")
     window.addstr('\nExample command line: "python3 quickcell.py 399677"')
+
 
 def perform_move(cmd, board):
     if cmd[0] == '0':
@@ -89,5 +94,6 @@ def perform_move(cmd, board):
             board.row_to_cell(from_row)
         else:
             board.row_to_row(from_row, to_row)
+
 
 curses.wrapper(main)

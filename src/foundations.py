@@ -1,6 +1,7 @@
 import curses
 from card import Card
 
+
 class Foundations:
     def __init__(self):
         self.founds = []
