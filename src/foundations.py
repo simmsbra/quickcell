@@ -13,7 +13,7 @@ class Foundations:
         for found in self.founds:
             if found.suit == card.suit:
                 return found.rank == card.rank - 1
-        return False
+        raise Exception("The suit of that card wasn't found in the foundations.")
 
     # determine whether given card should be placed into self
     # if it is needed in the game board then this returns false

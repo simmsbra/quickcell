@@ -20,6 +20,7 @@ def main(stdscr):
         stdscr.addstr("Press 'q' to quit.\n")
         stdscr.addstr("Press 'h' for help.\n")
         stdscr.addstr(">>{:>3} ".format(prev_cmd))
+
         cmd = get_command(stdscr, deal)
         if cmd == 'q':
             break

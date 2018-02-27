@@ -102,7 +102,7 @@ class Board:
 
         from_row.view()  # makes sure it's not empty
 
-        stack_index = from_row.stack_index
+        stack_index = from_row.stack_index()
         if to_row.is_empty():
             for i in range(stack_index, len(from_row.cards)):
                 if (len(from_row.cards) - i) <= self.calc_move_capacity(to_row):
