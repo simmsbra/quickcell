@@ -6,6 +6,7 @@ from card import Card
 from cell import Cell
 from cascade import Cascade
 from foundations import Foundations
+from BoardError import EmptyOriginError, FullDestinationError, CompatibilityError, TooFewSlotsError
 
 suits = ['clubs', 'spades', 'hearts', 'diamonds']
 
@@ -89,12 +90,12 @@ class Board:
             try:
                 self.move(self.cascades[index], self.cells[i])
                 break
-            except IndexError:
+            except EmptyOriginError:
                 raise
-            except Exception:
+            except FullDestinationError:
                 continue
         else:
-            raise Exception('The cells are full.')
+            raise FullDestinationError('The cells are full.')
 
     def row_to_row(self, orig, dest):
         from_row = self.cascades[orig]
@@ -114,9 +115,9 @@ class Board:
                     stack_index = i
                     break
             else:
-                raise Exception('The card(s) in the origin row cannot sit on the destination row.')
+                raise CompatibilityError('The card(s) in the origin row cannot sit on the destination row.')
             if self.calc_move_capacity(to_row) < (len(from_row.cards) - stack_index):
-                raise Exception('There are not enough open slots to move that stack.')
+                raise TooFewSlotsError('There are not enough open slots to move that stack.')
         tmp = from_row.view(stack_index)
         to_row.accept(tmp)
         from_row.remove(stack_index)
@@ -144,14 +145,14 @@ class Board:
                     if self.founds.should_accept(self.cells[i].view()):
                         self.cell_to_foundations(i)
                         has_moved = True
-                except Exception:
+                except EmptyOriginError:
                     pass
             for i in range(8):
                 try:
                     if self.founds.should_accept(self.cascades[i].view()):
                         self.row_to_foundations(i)
                         has_moved = True
-                except Exception:
+                except EmptyOriginError:
                     pass
             if not has_moved:
                 break

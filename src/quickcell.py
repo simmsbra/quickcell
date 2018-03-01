@@ -1,5 +1,6 @@
 import curses
 from board import Board
+from BoardError import BoardError
 
 
 # set curses colors and run the main game loop
@@ -32,7 +33,7 @@ def main(stdscr):
         try:
             perform_move(cmd, deal)
             prev_cmd = cmd
-        except Exception as problem:
+        except BoardError as problem:
             stdscr.move(*msg_line)
             stdscr.addstr(str(problem))
             stdscr.getkey()

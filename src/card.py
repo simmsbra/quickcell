@@ -27,5 +27,5 @@ class Card:
 
     # check suit and value to determine whether can move onto given card
     def can_sit_on(self, card):
-        return card.rank == self.rank + 1 \
-               and card.color != self.color
+        return (card.rank == self.rank + 1
+                and card.color != self.color)

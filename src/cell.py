@@ -1,3 +1,6 @@
+from BoardError import EmptyOriginError, FullDestinationError
+
+
 class Cell:
     def __init__(self):
         self.card = None
@@ -12,12 +15,12 @@ class Cell:
         if self.card is None:
             self.card = card
         else:
-            raise Exception('This cell is occupied.')
+            raise FullDestinationError('This cell is occupied.')
 
     # return the card in self to see if it can be moved
     def view(self):
         if self.card is None:
-            raise IndexError('This cell is empty.')
+            raise EmptyOriginError('This cell is empty.')
         return self.card
 
     def remove(self):

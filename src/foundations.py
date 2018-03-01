@@ -1,5 +1,6 @@
 import curses
 from card import Card
+from BoardError import CompatibilityError
 
 
 class Foundations:
@@ -13,7 +14,6 @@ class Foundations:
         for found in self.founds:
             if found.suit == card.suit:
                 return found.rank == card.rank - 1
-        raise Exception("The suit of that card wasn't found in the foundations.")
 
     # determine whether given card should be placed into self
     # if it is needed in the game board then this returns false
@@ -36,7 +36,7 @@ class Foundations:
     # place given card into self
     def accept(self, card):
         if not self.can_accept(card):
-            raise Exception('That card cannot move to the foundations yet.')
+            raise CompatibilityError('That card cannot move to the foundations yet.')
         for i, found in enumerate(self.founds):
             if found.suit == card.suit:
                 self.founds[i] = card
