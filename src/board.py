@@ -6,7 +6,7 @@ from card import Card
 from cell import Cell
 from cascade import Cascade
 from foundations import Foundations
-from BoardError import EmptyOriginError, FullDestinationError, CompatibilityError, TooFewSlotsError
+from board_error import EmptyOriginError, FullDestinationError, CompatibilityError, TooFewSlotsError
 
 suits = ['clubs', 'spades', 'hearts', 'diamonds']
 

@@ -1,4 +1,4 @@
-from BoardError import EmptyOriginError, FullDestinationError
+from board_error import EmptyOriginError, FullDestinationError
 
 
 class Cell:

@@ -1,6 +1,6 @@
 import curses
 from card import Card
-from BoardError import CompatibilityError
+from board_error import CompatibilityError
 
 
 class Foundations:

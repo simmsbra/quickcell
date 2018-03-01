@@ -1,5 +1,5 @@
 from card import Card
-from BoardError import EmptyOriginError, CompatibilityError
+from board_error import EmptyOriginError, CompatibilityError
 
 
 class Cascade:

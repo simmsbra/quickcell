@@ -1,6 +1,6 @@
 import curses
 from board import Board
-from BoardError import BoardError
+from board_error import BoardError
 
 
 # set curses colors and run the main game loop
