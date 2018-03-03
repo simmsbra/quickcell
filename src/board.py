@@ -45,7 +45,7 @@ class Board:
         self.show_bank(window, self.founds.founds)
         for i, cascade in enumerate(self.cascades):
             window.move(i, 3)
-            window.addstr(' {} '.format(i + 1))
+            window.addstr('  {} '.format(i + 1))
             cascade.show(window, self.founds)
         window.addstr('\n\nGame: {:6}\n'.format(self.seed))
 
