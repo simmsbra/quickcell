@@ -1,7 +1,10 @@
 import curses
+from copy import deepcopy
+
 from board import Board
 from board_error import BoardError
 
+history = []
 
 # set curses colors and run the main game loop
 def main(stdscr):
@@ -14,10 +17,13 @@ def main(stdscr):
 
     prev_cmd = '  '
     deal = Board()
+    history.append(deepcopy(deal))
+
     while True:
         stdscr.clear()
         deal.auto_move()
         deal.show(stdscr)
+
         stdscr.addstr("Press 'q' to quit.\n")
         stdscr.addstr("Press 'h' for help.\n")
         stdscr.addstr(">>{:>3} ".format(prev_cmd))
@@ -30,8 +36,15 @@ def main(stdscr):
             show_help(stdscr)
             stdscr.getkey()
             continue
+        if cmd == 'u':
+            if len(history) > 1:
+                deal = deepcopy(history[-2])
+                history.pop()
+            continue
+
         try:
             perform_move(cmd, deal)
+            history.append(deepcopy(deal))
             prev_cmd = cmd
         except BoardError as problem:
             stdscr.move(*msg_line)
@@ -43,7 +56,7 @@ def main(stdscr):
 def get_command(window, board):
     window.addstr('>')
     cmd = get_char(window, 0, 8, letters=True)
-    if cmd not in 'qh':
+    if cmd not in 'qhu':
         if cmd[0] == '0':
             board.show_cell_nums(window)
             cmd += get_char(window, 1, 4)
@@ -55,7 +68,7 @@ def get_command(window, board):
 def get_char(window, nmin, nmax, letters=False):
     while True:
         char = window.getkey()
-        if letters and (char in 'qh'):
+        if letters and (char in 'qhu'):
             break
         if char.isdecimal() and (nmin <= int(char) <= nmax):
             break
@@ -64,7 +77,8 @@ def get_char(window, nmin, nmax, letters=False):
 
 
 def show_help(window):
-    window.addstr('Color Groups:\n')
+    window.addstr("Press 'u' to undo.\n")
+    window.addstr('\nColor Groups:\n')
     window.addstr("\tClubs", curses.color_pair(1))
     window.addstr(" and ")
     window.addstr("spades\n", curses.color_pair(2))
