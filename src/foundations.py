@@ -1,4 +1,3 @@
-import curses
 from card import Card
 from board_error import CompatibilityError
 
@@ -14,6 +13,7 @@ class Foundations:
         for found in self.founds:
             if found.suit == card.suit:
                 return found.rank == card.rank - 1
+        raise RuntimeError('Card did not match any suit of the foundations!')
 
     # determine whether given card should be placed into self
     # if it is needed in the game board then this returns false

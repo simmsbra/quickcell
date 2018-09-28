@@ -1,5 +1,4 @@
 import sys
-import curses
 from random import randrange, Random
 
 from card import Card
@@ -8,13 +7,11 @@ from cascade import Cascade
 from foundations import Foundations
 from board_error import EmptyOriginError, FullDestinationError, CompatibilityError, TooFewSlotsError
 
-suits = ['clubs', 'spades', 'hearts', 'diamonds']
-
 
 class Board:
     def __init__(self):
         deck = []
-        for suit in suits:
+        for suit in ['clubs', 'spades', 'hearts', 'diamonds']:
             for rank in range(1, 14):
                 deck.append(Card(suit, rank))
         if len(sys.argv) > 1:
@@ -38,38 +35,6 @@ class Board:
         self.cells = []
         for i in range(4):
             self.cells.append(Cell())
-
-    def show(self, window):
-        self.show_bank(window, self.cells)
-        window.move(4, 0)
-        self.show_bank(window, self.founds.founds)
-        for i, cascade in enumerate(self.cascades):
-            window.move(i, 3)
-            window.addstr('  {} '.format(i + 1))
-            cascade.show(window, self.founds)
-        window.addstr('\n\nGame: {:6}\n'.format(self.seed))
-
-    # displays either the foundation bank or the cell bank
-    def show_bank(self, window, bank):
-        pos = window.getyx()
-        for i, unit in enumerate(bank):
-            window.move(pos[0] + i, pos[1])
-            if i == 0:
-                label = '0 ' if type(bank[0]) == Cell else '9 '
-            elif i == 3:
-                label = '┗ '
-            else:
-                label = '┃ '
-            window.addstr(label)
-            unit.show(window)
-        window.move(*pos)
-
-    # display a highlighted index (location) number for each cell
-    def show_cell_nums(self, window):
-        pos = window.getyx()
-        for i in range(4):
-            window.addstr(i, 0, str(i + 1), curses.A_REVERSE)
-        window.move(*pos)
 
     def move(self, origin, destination):
         tmp = origin.view()

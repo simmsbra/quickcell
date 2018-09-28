@@ -3,32 +3,33 @@ from copy import deepcopy
 
 from board import Board
 from board_error import BoardError
+from view import display, show_cell_nums
 
-history = []
 
 # set curses colors and run the main game loop
 def main(stdscr):
-    curses.init_pair(1, curses.COLOR_WHITE,   curses.COLOR_BLACK)
-    curses.init_pair(2, curses.COLOR_GREEN,   curses.COLOR_BLACK)
-    curses.init_pair(3, curses.COLOR_RED,     curses.COLOR_BLACK)
+    curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
+    curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(3, curses.COLOR_RED, curses.COLOR_BLACK)
     curses.init_pair(4, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
 
     msg_line = (13, 0)
 
     prev_cmd = '  '
     deal = Board()
+    history = []
     history.append(deepcopy(deal))
 
     while True:
         stdscr.clear()
         deal.auto_move()
-        deal.show(stdscr)
+        display(stdscr, deal)
 
         stdscr.addstr("Press 'q' to quit.\n")
         stdscr.addstr("Press 'h' for help.\n")
         stdscr.addstr(">>{:>3} ".format(prev_cmd))
 
-        cmd = get_command(stdscr, deal)
+        cmd = get_command(stdscr)
         if cmd == 'q':
             break
         if cmd == 'h':
@@ -53,12 +54,12 @@ def main(stdscr):
 
 
 # get user input until a valid command is constructed then return it
-def get_command(window, board):
+def get_command(window):
     window.addstr('>')
     cmd = get_char(window, 0, 8, letters=True)
     if cmd not in 'qhu':
         if cmd[0] == '0':
-            board.show_cell_nums(window)
+            show_cell_nums(window)
             cmd += get_char(window, 1, 4)
         cmd += get_char(window, 0, 9)
     return cmd

@@ -5,12 +5,6 @@ class Cell:
     def __init__(self):
         self.card = None
 
-    def show(self, window):
-        if self.card is None:
-            window.addstr('•')
-        else:
-            self.card.show(window)
-
     def accept(self, card):
         if self.card is None:
             self.card = card
