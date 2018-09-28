@@ -34,7 +34,11 @@ def main(stdscr):
             break
         if cmd == 'h':
             stdscr.move(*msg_line)
-            show_help(stdscr)
+            try:
+                show_help(stdscr)
+            except curses.error:
+                stdscr.move(*msg_line)
+                stdscr.addstr('ERROR: Window is too small.', curses.A_REVERSE)
             stdscr.getkey()
             continue
         if cmd == 'u':
