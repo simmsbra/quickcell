@@ -1,4 +1,5 @@
 import curses
+import sys
 from copy import deepcopy
 
 from board import Board
@@ -14,9 +15,14 @@ def main(stdscr):
     curses.init_pair(4, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
 
     msg_line = (13, 0)
-
     prev_cmd = '  '
-    deal = Board()
+
+    if len(sys.argv) > 1:
+        seed = int(sys.argv[1])
+        deal = Board(seed)
+    else:
+        deal = Board()
+
     history = []
     history.append(deepcopy(deal))
 

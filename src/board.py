@@ -1,4 +1,3 @@
-import sys
 from random import randrange, Random
 
 from card import Card
@@ -9,15 +8,12 @@ from board_error import EmptyOriginError, FullDestinationError, CompatibilityErr
 
 
 class Board:
-    def __init__(self):
+    def __init__(self, seed=randrange(1000000)):
+        self.seed = seed
         deck = []
         for suit in ['clubs', 'spades', 'hearts', 'diamonds']:
             for rank in range(1, 14):
                 deck.append(Card(suit, rank))
-        if len(sys.argv) > 1:
-            self.seed = int(sys.argv[1])
-        else:
-            self.seed = randrange(1000000)
         Random(self.seed).shuffle(deck)
 
         # Fill the cascades with the shuffled deck of cards
