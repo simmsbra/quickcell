@@ -4,10 +4,10 @@ QuickCell is an implementation of the single-player card game FreeCell. It place
 ![Demo](https://raw.githubusercontent.com/simmsbra/quickcell/master/demo.gif)
 
 ## Features
-- *Smart Highlighting*: Cards that are needed to advance will be highlit so one doesn't have to search for them.
-- *Minimal Keystrokes*: Moves are 2 to 3 strokes on the numpad, do not require the enter key, and are natural to string together.
+- *Smart Highlighting*: Cards that are needed to advance will be highlit for quick spotting.
+- *Minimal Keystrokes*: Moves are made with 2 to 3 keystrokes, do not require the enter key, and are easy to string together on a numpad.
 - *Extended Automoving*: A more aggressive but still safe-for-play system will automatically move cards to the foundations.
-- *Distilled Display*: The game state is represented as simply as possible so as not to interfere with quick play.
+- *Distilled Display*: The game state is presented as simply as possible to keep the focus on quick, strategic play.
 
 ## Running
 - Linux
@@ -20,6 +20,7 @@ QuickCell is an implementation of the single-player card game FreeCell. It place
 - Windows
   - curses, a required library, is not present.
   - To play, you can use a Linux LiveCD/USB or virtual machine.
+  - (This project may be overhauled to become OS-independent in the future.)
 
 ## Author
 This project was created by Brandon Simmons.
