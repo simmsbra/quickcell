@@ -35,7 +35,8 @@ def main(stdscr):
         stdscr.addstr("Press 'h' for help.\n")
         stdscr.addstr(">>{:>3} ".format(prev_cmd))
 
-        cmd = get_command(stdscr)
+        stdscr.addstr('>')
+        cmd = input_command(stdscr)
         if cmd == 'q':
             break
         if cmd == 'h':
@@ -63,23 +64,38 @@ def main(stdscr):
             stdscr.getkey()
 
 
-# get user input until a valid command is constructed then return it
-def get_command(window):
-    window.addstr('>')
-    cmd = get_char(window, 0, 8, letters=True)
-    if cmd not in 'qhu':
-        if cmd[0] == '0':
-            show_cell_nums(window)
-            cmd += get_char(window, 1, 4)
-        cmd += get_char(window, 0, 9)
+# get user input until a valid command is constructed; then return it
+def input_command(window):
+    cmd = ''
+    char = input_char(window, 0, 8)
+    if char in 'qhu':
+        return char
+    else:
+        cmd += char
+
+    if cmd[0] == '0':
+        char = input_char(window, 1, 4)
+        if char in 'qhu':
+            return char
+        else:
+            cmd += char
+
+    char = input_char(window, 0, 9)
+    if char in 'qhu':
+        return char
+    else:
+        cmd += char
+
     return cmd
 
 
-# get valid characters (may include letters) from user
-def get_char(window, nmin, nmax, letters=False):
+# get valid characters (may include letters) from user; echoing them
+def input_char(window, nmin, nmax):
+    if nmin == 1 and nmax == 4:
+        show_cell_nums(window)
     while True:
         char = window.getkey()
-        if letters and (char in 'qhu'):
+        if char in 'qhu':
             break
         if char.isdecimal() and (nmin <= int(char) <= nmax):
             break
