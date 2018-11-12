@@ -3,7 +3,7 @@ import sys
 from copy import deepcopy
 
 from board import Board
-from board_error import BoardError
+from game_exception import BoardException, LetterCommandException
 from view import display, show_cell_nums
 
 
@@ -58,7 +58,7 @@ def main(stdscr):
             perform_move(cmd, deal)
             history.append(deepcopy(deal))
             prev_cmd = cmd
-        except BoardError as problem:
+        except BoardException as problem:
             stdscr.move(*msg_line)
             stdscr.addstr(str(problem))
             stdscr.getkey()
@@ -66,25 +66,13 @@ def main(stdscr):
 
 # get user input until a valid command is constructed; then return it
 def input_command(window):
-    cmd = ''
-    char = input_char(window, 0, 8)
-    if char in 'qhu':
-        return char
-    else:
-        cmd += char
-
-    if cmd[0] == '0':
-        char = input_char(window, 1, 4)
-        if char in 'qhu':
-            return char
-        else:
-            cmd += char
-
-    char = input_char(window, 0, 9)
-    if char in 'qhu':
-        return char
-    else:
-        cmd += char
+    try:
+        cmd = input_char(window, 0, 8)
+        if cmd == '0':
+            cmd += input_char(window, 1, 4)
+        cmd += input_char(window, 0, 9)
+    except LetterCommandException as exp:
+        cmd = exp.args[0]
 
     return cmd
 
@@ -96,7 +84,7 @@ def input_char(window, nmin, nmax):
     while True:
         char = window.getkey()
         if char in 'qhu':
-            break
+            raise LetterCommandException(char)
         if char.isdecimal() and (nmin <= int(char) <= nmax):
             break
     window.addstr(char)

@@ -4,7 +4,7 @@ from card import Card
 from cell import Cell
 from cascade import Cascade
 from foundations import Foundations
-from board_error import EmptyOriginError, FullDestinationError, CompatibilityError, TooFewSlotsError
+from game_exception import EmptyOriginException, FullDestinationException, CompatibilityException, TooFewSlotsException
 
 
 class Board:
@@ -51,12 +51,12 @@ class Board:
             try:
                 self.move(self.cascades[index], self.cells[i])
                 break
-            except EmptyOriginError:
+            except EmptyOriginException:
                 raise
-            except FullDestinationError:
+            except FullDestinationException:
                 continue
         else:
-            raise FullDestinationError('The cells are full.')
+            raise FullDestinationException('The cells are full.')
 
     def row_to_row(self, orig, dest):
         from_row = self.cascades[orig]
@@ -76,9 +76,9 @@ class Board:
                     stack_index = i
                     break
             else:
-                raise CompatibilityError('The card(s) in the origin row cannot sit on the destination row.')
+                raise CompatibilityException('The card(s) in the origin row cannot sit on the destination row.')
             if self.calc_move_capacity(to_row) < (len(from_row.cards) - stack_index):
-                raise TooFewSlotsError('There are not enough open slots to move that stack.')
+                raise TooFewSlotsException('There are not enough open slots to move that stack.')
         tmp = from_row.view(stack_index)
         to_row.accept(tmp)
         from_row.remove(stack_index)
@@ -106,14 +106,14 @@ class Board:
                     if self.founds.should_accept(self.cells[i].view()):
                         self.cell_to_foundations(i)
                         has_moved = True
-                except EmptyOriginError:
+                except EmptyOriginException:
                     pass
             for i in range(8):
                 try:
                     if self.founds.should_accept(self.cascades[i].view()):
                         self.row_to_foundations(i)
                         has_moved = True
-                except EmptyOriginError:
+                except EmptyOriginException:
                     pass
             if not has_moved:
                 break

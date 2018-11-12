@@ -1,4 +1,4 @@
-from board_error import EmptyOriginError, CompatibilityError
+from game_exception import EmptyOriginException, CompatibilityException
 
 
 class Cascade:
@@ -10,7 +10,7 @@ class Cascade:
         if not isinstance(stack, list):
             stack = [stack]
         if not self.can_accept(stack[0]):
-            raise CompatibilityError('Those cards cannot sit on this cascade.')
+            raise CompatibilityException('Those cards cannot sit on this cascade.')
         self.cards.extend(stack)
 
     # determine whether given card can be placed onto self
@@ -20,7 +20,7 @@ class Cascade:
     # return the card at index in self to see if it can be moved
     def view(self, index=-1):
         if not self.cards:
-            raise EmptyOriginError('You cannot remove a card from an empty cascade.')
+            raise EmptyOriginException('You cannot remove a card from an empty cascade.')
         if index == -1:
             return self.cards[-1]
         return self.cards[index:]

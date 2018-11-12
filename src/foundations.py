@@ -1,5 +1,5 @@
 from card import Card
-from board_error import CompatibilityError
+from game_exception import CompatibilityException
 
 
 class Foundations:
@@ -36,7 +36,7 @@ class Foundations:
     # place given card into self
     def accept(self, card):
         if not self.can_accept(card):
-            raise CompatibilityError('That card cannot move to the foundations yet.')
+            raise CompatibilityException('That card cannot move to the foundations yet.')
         for i, found in enumerate(self.founds):
             if found.suit == card.suit:
                 self.founds[i] = card
