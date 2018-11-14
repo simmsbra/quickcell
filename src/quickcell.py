@@ -71,8 +71,8 @@ def input_command(window):
         if cmd == '0':
             cmd += input_char(window, 1, 4)
         cmd += input_char(window, 0, 9)
-    except LetterCommandException as exp:
-        cmd = exp.args[0]
+    except LetterCommandException as exc:
+        cmd = exc.letter
 
     return cmd
 
