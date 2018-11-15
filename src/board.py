@@ -101,14 +101,14 @@ class Board:
     def auto_move(self):
         while True:
             has_moved = False
-            for i in range(4):
+            for i in range(len(self.cells)):
                 try:
                     if self.founds.should_accept(self.cells[i].view()):
                         self.cell_to_foundations(i)
                         has_moved = True
                 except EmptyOriginException:
                     pass
-            for i in range(8):
+            for i in range(len(self.cascades)):
                 try:
                     if self.founds.should_accept(self.cascades[i].view()):
                         self.row_to_foundations(i)
