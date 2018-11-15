@@ -56,12 +56,13 @@ def main(stdscr):
 
         try:
             perform_move(cmd, deal)
-            history.append(deepcopy(deal))
-            prev_cmd = cmd
         except BoardException as problem:
             stdscr.move(*msg_line)
             stdscr.addstr(str(problem))
             stdscr.getkey()
+        else:
+            history.append(deepcopy(deal))
+            prev_cmd = cmd
 
 
 # get user input until a valid command is constructed; then return it
