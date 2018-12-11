@@ -83,7 +83,10 @@ def input_char(window, nmin, nmax):
     if nmin == 1 and nmax == 4:
         show_cell_nums(window)
     while True:
-        char = window.getkey()
+        try:
+            char = window.getkey()
+        except KeyboardInterrupt:
+            sys.exit()
         if char in 'qhu':
             raise LetterCommandException(char)
         if char.isdecimal() and (nmin <= int(char) <= nmax):
