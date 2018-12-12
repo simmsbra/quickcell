@@ -102,8 +102,12 @@ def validate(cmd):
             raise InvalidCommandException(cmd[1] + ' is not a valid cell number.')
         if cmd[2] == '0':
             raise InvalidCommandException('You cannot move from a cell to a cell.')
-    elif cmd[0] == '9':
+
+    if cmd[0] == '9':
         raise InvalidCommandException('You cannot move from the foundations.')
+
+    if cmd[0] == cmd[1]:
+        raise InvalidCommandException('The rows entered must differ.')
 
 
 def show_help(window):
