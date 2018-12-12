@@ -1,5 +1,5 @@
 # QuickCell
-QuickCell is an implementation of the single-player card game FreeCell. It places the focus on the actual strategy of the game by automating tedious moves, requiring minimal input, and providing a highlighting system.
+QuickCell is an implementation of the single-player card game FreeCell. QuickCell places the focus on the actual strategy of the game by automating tedious moves, requiring minimal input, and providing a highlighting system.
 
 ![Demo](https://raw.githubusercontent.com/simmsbra/quickcell/master/demo.gif)
 
@@ -11,9 +11,9 @@ QuickCell is an implementation of the single-player card game FreeCell. It place
 
 ## Running
 - Linux
-  1. Install python3, which comes with curses, through your package manager.
-  2. Download this QuickCell repository.
-  3. Move to the src directory.
+  1. Install python3, which comes with the curses library.
+  2. Download or clone this repository.
+  3. Move to the src/ directory.
   4. Run the program.
      - `python3 quickcell.py` to play a random deal
      - `python3 quickcell.py 399677` to play, for example, game 399677 (this can be used to replay deals)
