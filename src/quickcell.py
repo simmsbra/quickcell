@@ -3,7 +3,7 @@ import sys
 from copy import deepcopy
 
 from board import Board
-from game_exception import BoardException, LetterCommandException
+from game_exception import BoardException, LetterCommandException, InvalidCommandException
 from view import display, show_cell_nums
 
 
@@ -55,8 +55,9 @@ def main(stdscr):
             continue
 
         try:
-            perform_move(cmd, deal)
-        except BoardException as problem:
+            validate(cmd)
+            attempt_move(cmd, deal)
+        except (InvalidCommandException, BoardException) as problem:
             stdscr.move(*msg_line)
             stdscr.addstr(str(problem))
             stdscr.getkey()
@@ -68,10 +69,11 @@ def main(stdscr):
 # get user input until a valid command is constructed; then return it
 def input_command(window):
     try:
-        cmd = input_char(window, 0, 8)
+        cmd = input_char(window)
         if cmd == '0':
-            cmd += input_char(window, 1, 4)
-        cmd += input_char(window, 0, 9)
+            show_cell_nums(window)
+            cmd += input_char(window)
+        cmd += input_char(window)
     except LetterCommandException as exc:
         cmd = exc.letter
 
@@ -79,9 +81,7 @@ def input_command(window):
 
 
 # get valid characters (may include letters) from user; echoing them
-def input_char(window, nmin, nmax):
-    if nmin == 1 and nmax == 4:
-        show_cell_nums(window)
+def input_char(window):
     while True:
         try:
             char = window.getkey()
@@ -89,10 +89,21 @@ def input_char(window, nmin, nmax):
             sys.exit()
         if char in 'qhu':
             raise LetterCommandException(char)
-        if char.isdecimal() and (nmin <= int(char) <= nmax):
+        if char.isdecimal():
             break
     window.addstr(char)
     return char
+
+
+# makes sure a move command (2-3 digits) respects the rules
+def validate(cmd):
+    if cmd[0] == '0':
+        if not (1 <= int(cmd[1]) <= 4):
+            raise InvalidCommandException(cmd[1] + ' is not a valid cell number.')
+        if cmd[2] == '0':
+            raise InvalidCommandException('You cannot move from a cell to a cell.')
+    elif cmd[0] == '9':
+        raise InvalidCommandException('You cannot move from the foundations.')
 
 
 def show_help(window):
@@ -112,7 +123,7 @@ def show_help(window):
     window.addstr('\nExample command line: "python3 quickcell.py 399677"')
 
 
-def perform_move(cmd, board):
+def attempt_move(cmd, board):
     if cmd[0] == '0':
         cell = int(cmd[1]) - 1
         if cmd[2] == '9':

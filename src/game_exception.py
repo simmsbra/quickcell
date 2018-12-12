@@ -14,6 +14,11 @@ class LetterCommandException(GameException):
         self.letter = letter
 
 
+class InvalidCommandException(GameException):
+    """Raised when a move command does not conform to the game rules or command structure"""
+    pass
+
+
 class BoardException(GameException):
     """Base class for exceptions relating to the board"""
     pass
