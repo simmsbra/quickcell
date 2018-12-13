@@ -1,22 +1,21 @@
 import curses
-from cell import Cell
 
 
 def display(window, board):
 
     # displays either the foundation bank or the cell bank
-    def show_bank(bank):
+    def show_bank(bank, bank_type):
         pos = window.getyx()
         for i, unit in enumerate(bank):
             window.move(pos[0] + i, pos[1])
             if i == 0:
-                label = '0 ' if isinstance(unit, Cell) else '9 '
+                label = '0 ' if bank_type == 'cells' else '9 '
             elif i == 3:
                 label = '┗ '
             else:
                 label = '┃ '
             window.addstr(label)
-            if isinstance(unit, Cell):
+            if bank_type == 'cells':
                 show_cell(unit)
             else: # it's a foundation card
                 show_card(unit)
@@ -51,9 +50,9 @@ def display(window, board):
         for card in cascade.cards:
             show_card(card, founds.should_accept(card))
 
-    show_bank(board.cells)
+    show_bank(board.cells, 'cells')
     window.move(4, 0)
-    show_bank(board.founds.founds)
+    show_bank(board.founds.founds, 'foundations')
     for i, cascade in enumerate(board.cascades):
         window.move(i, 3)
         window.addstr('  {} '.format(i + 1))
