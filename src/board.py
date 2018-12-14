@@ -95,7 +95,8 @@ class Board:
                 empty_cascades += 1
         if to_row.is_empty():
             empty_cascades -= 1
-        return (empty_cells + 1) * (empty_cascades + 1)
+
+        return (empty_cells + 1) * 2**empty_cascades
 
     # automatically move cards to the foundations that should move there
     def auto_move(self):

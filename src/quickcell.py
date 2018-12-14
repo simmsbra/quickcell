@@ -123,7 +123,7 @@ def show_help(window):
     window.addstr("\nTo move, type the number of the origin then the number of the destination.\n")
     window.addstr("Origins:      1-8 for cascades; 0 then 1-4 for cells\n")
     window.addstr("Destinations: 1-8 for cascades; 0 for the cells; 9 for the foundations\n")
-    window.addstr("\nStacks of cards will be handled automatically. Note: If you do not want the largest moveable stack to move to an empty cascade, simply move the cards manually using the cells.\n")
+    window.addstr("\nStacks of cards will be handled automatically. Note: If you do not want the largest movable stack to move to an empty cascade, simply move the cards manually using the cells.\n")
     window.addstr('\nExample command line: "python3 quickcell.py 399677"')
 
 

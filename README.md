@@ -28,3 +28,6 @@ This project was created by Brandon Simmons.
 ## Thanks
 Thank you Michael Keller for creating the [FreeCell FAQ](http://solitairelaboratory.com/fcfaq.html).
 The last question of section 2, about cards automatically moving home, was particularly helpful.
+
+Thank you Dan Fletcher for writing the article [Freecell PowerMoves Explained](http://EzineArticles.com/104608).
+The formula for determining the longest movable card sequence is implemented here.
