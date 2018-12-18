@@ -7,12 +7,9 @@ from game_exception import BoardException, LetterCommandException, InvalidComman
 from view import display, show_cell_nums
 
 
-# set curses colors and run the main game loop
+# prepare game and run the main loop
 def main(stdscr):
-    curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
-    curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
-    curses.init_pair(3, curses.COLOR_RED, curses.COLOR_BLACK)
-    curses.init_pair(4, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
+    set_colors()
 
     msg_line = (13, 0)
     prev_cmd = '  '
@@ -42,6 +39,7 @@ def main(stdscr):
         if cmd == 'h':
             stdscr.move(*msg_line)
             try:
+                stdscr.clear()
                 show_help(stdscr)
             except curses.error:
                 stdscr.move(*msg_line)
@@ -64,6 +62,19 @@ def main(stdscr):
         else:
             history.append(deepcopy(deal))
             prev_cmd = cmd
+
+
+def set_colors():
+    # card suit colors
+    curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
+    curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(3, curses.COLOR_RED, curses.COLOR_BLACK)
+    curses.init_pair(4, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
+
+    # colors for move examples in help section
+    curses.init_pair(5, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+    curses.init_pair(6, curses.COLOR_BLUE, curses.COLOR_BLACK)
+    curses.init_pair(7, curses.COLOR_CYAN, curses.COLOR_BLACK)
 
 
 # get user input until a valid command is constructed; then return it
@@ -112,19 +123,44 @@ def validate(cmd):
 
 def show_help(window):
     window.addstr("Press 'u' to undo.\n")
-    window.addstr('\nColor Groups:\n')
-    window.addstr("\tClubs", curses.color_pair(1))
-    window.addstr(" and ")
-    window.addstr("spades\n", curses.color_pair(2))
-    window.addstr("\tHearts", curses.color_pair(3))
-    window.addstr(" and ")
-    window.addstr("diamonds\n", curses.color_pair(4))
+    window.addstr("\n")
 
-    window.addstr("\nTo move, type the number of the origin then the number of the destination.\n")
-    window.addstr("Origins:      1-8 for cascades; 0 then 1-4 for cells\n")
-    window.addstr("Destinations: 1-8 for cascades; 0 for the cells; 9 for the foundations\n")
-    window.addstr("\nStacks of cards will be handled automatically. Note: If you do not want the largest movable stack to move to an empty cascade, simply move the cards manually using the cells.\n")
-    window.addstr('\nExample command line: "python3 quickcell.py 399677"')
+    window.addstr("Dark", curses.color_pair(3))
+    window.addstr(" Cards", curses.color_pair(4))
+    window.addstr(" :: ")
+    window.addstr("Light", curses.color_pair(1))
+    window.addstr(" Cards\n\n", curses.color_pair(2))
+
+    window.addstr(" 67", curses.color_pair(5))
+    window.addstr(" -> ")
+    window.addstr("cascade 6", curses.color_pair(5))
+    window.addstr(" to ")
+    window.addstr("cascade 7\n", curses.color_pair(5))
+    window.addstr(" 3", curses.color_pair(5))
+    window.addstr("0", curses.color_pair(6))
+    window.addstr(" -> ")
+    window.addstr("cascade 3", curses.color_pair(5))
+    window.addstr(" to  ")
+    window.addstr("cells\n", curses.color_pair(6))
+    window.addstr("03", curses.color_pair(6))
+    window.addstr("2", curses.color_pair(5))
+    window.addstr(" ->  ")
+    window.addstr("cell 3", curses.color_pair(6))
+    window.addstr("   to ")
+    window.addstr("cascade 2\n\n", curses.color_pair(5))
+
+    window.addstr(" 5", curses.color_pair(5))
+    window.addstr("9", curses.color_pair(7))
+    window.addstr(" -> ")
+    window.addstr("cascade 5", curses.color_pair(5))
+    window.addstr(" to ")
+    window.addstr("foundations\n", curses.color_pair(7))
+    window.addstr("01", curses.color_pair(6))
+    window.addstr("9", curses.color_pair(7))
+    window.addstr(" ->  ")
+    window.addstr("cell 1", curses.color_pair(6))
+    window.addstr("   to ")
+    window.addstr("foundations", curses.color_pair(7))
 
 
 def attempt_move(cmd, board):
