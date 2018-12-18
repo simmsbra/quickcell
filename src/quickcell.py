@@ -12,7 +12,7 @@ def main(stdscr):
     set_colors()
 
     msg_line = (13, 0)
-    prev_cmd = '  '
+    prev_cmd = ''
 
     if len(sys.argv) > 1:
         seed = int(sys.argv[1])
@@ -79,6 +79,7 @@ def set_colors():
 
 # get user input until a valid command is constructed; then return it
 def input_command(window):
+    curses.curs_set(1) # show cursor
     try:
         cmd = input_char(window)
         if cmd == '0':
@@ -88,6 +89,7 @@ def input_command(window):
     except LetterCommandException as exc:
         cmd = exc.letter
 
+    curses.curs_set(0) # hide cursor
     return cmd
 
 
