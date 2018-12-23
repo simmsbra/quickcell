@@ -8,8 +8,11 @@ from game_exception import EmptyOriginException, FullDestinationException, Compa
 
 
 class Board:
-    def __init__(self, seed=randrange(1000000)):
-        self.seed = seed
+    def __init__(self, seed=None):
+        if seed is None:
+            self.seed = randrange(1000000)
+        else:
+            self.seed = seed
         deck = []
         for suit in ['clubs', 'spades', 'hearts', 'diamonds']:
             for rank in range(1, 14):
