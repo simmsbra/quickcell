@@ -24,44 +24,44 @@ def main(stdscr):
     history.append(deepcopy(deal))
 
     while True:
-        stdscr.clear()
         deal.auto_move()
+        stdscr.clear()
         display(stdscr, deal)
 
         stdscr.addstr("Press 'q' to quit.\n")
         stdscr.addstr("Press 'h' for help.\n")
         stdscr.addstr(">>{:>3} ".format(prev_cmd))
-
         stdscr.addstr('>')
+
         cmd = input_command(stdscr)
         if cmd == 'q':
             break
-        if cmd == 'h':
-            stdscr.move(*msg_line)
+
+        elif cmd == 'h':
+            stdscr.clear()
             try:
-                stdscr.clear()
                 show_help(stdscr)
             except curses.error:
-                stdscr.move(*msg_line)
+                stdscr.clear()
                 stdscr.addstr('ERROR: Window is too small.', curses.A_REVERSE)
             stdscr.getkey()
-            continue
-        if cmd == 'u':
+
+        elif cmd == 'u':
             if len(history) > 1:
                 deal = deepcopy(history[-2])
                 history.pop()
-            continue
 
-        try:
-            validate(cmd)
-            attempt_move(cmd, deal)
-        except (InvalidCommandException, BoardException) as problem:
-            stdscr.move(*msg_line)
-            stdscr.addstr(str(problem))
-            stdscr.getkey()
         else:
-            history.append(deepcopy(deal))
-            prev_cmd = cmd
+            try:
+                validate(cmd)
+                attempt_move(cmd, deal)
+            except (InvalidCommandException, BoardException) as problem:
+                stdscr.move(*msg_line)
+                stdscr.addstr(str(problem))
+                stdscr.getkey()
+            else:
+                history.append(deepcopy(deal))
+                prev_cmd = cmd
 
 
 def set_colors():
