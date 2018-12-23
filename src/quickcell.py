@@ -11,8 +11,6 @@ from view import display, show_cell_nums
 def main(stdscr):
     set_colors()
 
-    prev_cmd = ''
-
     if len(sys.argv) > 1:
         seed = int(sys.argv[1])
         deal = Board(seed)
@@ -21,6 +19,8 @@ def main(stdscr):
 
     history = []
     history.append(deepcopy(deal))
+
+    prev_cmd = ''
 
     while True:
         deal.auto_move()
@@ -36,7 +36,14 @@ def main(stdscr):
         if cmd == 'q':
             break
 
-        elif cmd == 'h':
+        if cmd == 'n':
+            deal = Board()
+            history = []
+            history.append(deepcopy(deal))
+            prev_cmd = ''
+            continue
+
+        if cmd == 'h':
             stdscr.clear()
             try:
                 print_help(stdscr)
@@ -98,7 +105,7 @@ def input_char(window):
             char = window.getkey()
         except KeyboardInterrupt:
             sys.exit()
-        if char in 'qhu':
+        if char in 'qhun':
             raise LetterCommandException(char)
         if char.isdecimal():
             break
@@ -142,6 +149,7 @@ def attempt_move(cmd, board):
 
 def print_help(window):
     window.addstr("Press 'u' to undo.\n")
+    window.addstr("Press 'n' to deal a new game.\n")
     window.addstr("\n")
 
     window.addstr("Dark", curses.color_pair(3))
