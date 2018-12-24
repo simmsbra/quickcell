@@ -11,7 +11,6 @@ from view import display, show_cell_nums
 def main(stdscr):
     set_colors()
 
-    msg_line = (13, 0)
     prev_cmd = ''
 
     if len(sys.argv) > 1:
@@ -40,7 +39,7 @@ def main(stdscr):
         elif cmd == 'h':
             stdscr.clear()
             try:
-                show_help(stdscr)
+                print_help(stdscr)
             except curses.error:
                 stdscr.clear()
                 stdscr.addstr('ERROR: Window is too small.', curses.A_REVERSE)
@@ -56,8 +55,7 @@ def main(stdscr):
                 validate(cmd)
                 attempt_move(cmd, deal)
             except (InvalidCommandException, BoardException) as problem:
-                stdscr.move(*msg_line)
-                stdscr.addstr(str(problem))
+                stdscr.addstr('\n' + str(problem), curses.A_REVERSE)
                 stdscr.getkey()
             else:
                 history.append(deepcopy(deal))
@@ -123,7 +121,26 @@ def validate(cmd):
         raise InvalidCommandException('The rows entered must differ.')
 
 
-def show_help(window):
+def attempt_move(cmd, board):
+    if cmd[0] == '0':
+        cell = int(cmd[1]) - 1
+        if cmd[2] == '9':
+            board.cell_to_foundations(cell)
+        else:
+            row = int(cmd[2]) - 1
+            board.cell_to_row(cell, row)
+    else:
+        from_row = int(cmd[0]) - 1
+        to_row = int(cmd[1]) - 1
+        if cmd[1] == '9':
+            board.row_to_foundations(from_row)
+        elif cmd[1] == '0':
+            board.row_to_cell(from_row)
+        else:
+            board.row_to_row(from_row, to_row)
+
+
+def print_help(window):
     window.addstr("Press 'u' to undo.\n")
     window.addstr("\n")
 
@@ -163,25 +180,6 @@ def show_help(window):
     window.addstr("cell 1", curses.color_pair(6))
     window.addstr("   to ")
     window.addstr("foundations", curses.color_pair(7))
-
-
-def attempt_move(cmd, board):
-    if cmd[0] == '0':
-        cell = int(cmd[1]) - 1
-        if cmd[2] == '9':
-            board.cell_to_foundations(cell)
-        else:
-            row = int(cmd[2]) - 1
-            board.cell_to_row(cell, row)
-    else:
-        from_row = int(cmd[0]) - 1
-        to_row = int(cmd[1]) - 1
-        if cmd[1] == '9':
-            board.row_to_foundations(from_row)
-        elif cmd[1] == '0':
-            board.row_to_cell(from_row)
-        else:
-            board.row_to_row(from_row, to_row)
 
 
 curses.wrapper(main)
