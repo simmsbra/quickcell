@@ -4,7 +4,7 @@ from copy import deepcopy
 
 from board import Board
 from game_exception import BoardException, LetterCommandException, InvalidCommandException
-from view import display, show_cell_nums
+from view import display_game, show_cell_nums
 
 
 # prepare game and run the main loop
@@ -25,10 +25,11 @@ def main(stdscr):
     while True:
         deal.auto_move()
         stdscr.clear()
-        display(stdscr, deal)
+        display_game(stdscr, deal)
 
         stdscr.addstr("Press 'q' to quit.\n")
         stdscr.addstr("Press 'h' for help.\n")
+        # previous command displays with a fixed width of 3
         stdscr.addstr(">>{:>3} ".format(prev_cmd))
         stdscr.addstr('>')
 
@@ -82,7 +83,8 @@ def set_colors():
     curses.init_pair(7, curses.COLOR_CYAN, curses.COLOR_BLACK)
 
 
-# get user input until a valid command is constructed; then return it
+# get user input until a valid command is constructed
+# then return the valid command
 def input_command(window):
     curses.curs_set(1) # show cursor
     try:

@@ -7,7 +7,7 @@ class LetterCommandException(GameException):
     """Raised when a letter command is read during command input
 
     Attribute:
-        letter -- the letter command that the user entered
+        letter :: the letter command that the user entered
     """
 
     def __init__(self, letter):

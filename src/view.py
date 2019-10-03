@@ -1,9 +1,11 @@
 import curses
 
 
-def display(window, board):
+def display_game(window, board):
 
     # displays either the foundation bank or the cell bank
+    # where a "bank" is a group of 4 spots for cards or
+    # stacks of cards
     def show_bank(bank, bank_type):
         pos = window.getyx()
         for i, unit in enumerate(bank):
@@ -27,7 +29,6 @@ def display(window, board):
         else:
             show_card(cell.card)
 
-    # display to screen; highlight if can move to foundations
     def show_card(card, highlight=False):
         suits = ['clubs', 'spades', 'hearts', 'diamonds']
         color = curses.color_pair(suits.index(card.suit) + 1)
@@ -59,7 +60,8 @@ def display(window, board):
         show_cascade(cascade, board.founds)
     window.addstr('\n\nGame: {:6}\n'.format(board.seed))
 
-# display a highlighted index (location) number for each cell
+# display, in a vertical line, a highlighted index (location)
+# number for each cell
 def show_cell_nums(window):
     pos = window.getyx()
     for i in range(4):
