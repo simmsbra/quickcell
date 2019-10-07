@@ -3,7 +3,7 @@ from random import randrange, Random
 from card import Card
 from cell import Cell
 from cascade import Cascade
-from foundations import Foundations
+from foundation import Foundation
 from game_exception import EmptyOriginException, FullDestinationException, CompatibilityException, TooFewSlotsException
 
 
@@ -13,8 +13,10 @@ class Board:
             self.seed = randrange(1000000)
         else:
             self.seed = seed
+
+        suits = ['clubs', 'spades', 'hearts', 'diamonds']
         deck = []
-        for suit in ['clubs', 'spades', 'hearts', 'diamonds']:
+        for suit in suits:
             for rank in range(1, 14):
                 deck.append(Card(suit, rank))
         Random(self.seed).shuffle(deck)
@@ -30,7 +32,10 @@ class Board:
             self.cascades.append(Cascade(deck[place:end]))
             place = end
 
-        self.founds = Foundations()
+        self.foundations = {}
+        for suit in suits:
+            self.foundations[suit] = (Foundation(suit))
+
         self.cells = []
         for i in range(4):
             self.cells.append(Cell())
@@ -41,13 +46,15 @@ class Board:
         origin.remove()
 
     def cell_to_foundations(self, index):
-        self.move(self.cells[index], self.founds)
+        card = self.cells[index].view()
+        self.move(self.cells[index], self.foundations[card.suit])
 
     def cell_to_row(self, cell_index, row_index):
         self.move(self.cells[cell_index], self.cascades[row_index])
 
     def row_to_foundations(self, index):
-        self.move(self.cascades[index], self.founds)
+        card = self.cascades[index].view()
+        self.move(self.cascades[index], self.foundations[card.suit])
 
     def row_to_cell(self, index):
         for i, cell in enumerate(self.cells):
@@ -101,20 +108,49 @@ class Board:
 
         return (empty_cells + 1) * 2**empty_cascades
 
+    def should_foundations_accept_card(self, card):
+        # should not accept if cannot accept
+        if not self.foundations[card.suit].can_accept(card):
+            return False
+
+        # accept only if none of the dependent cards may need to sit
+        # in the cascades on the given card
+        for dependent_card in self.get_dependent_cards(card):
+            if (not self.foundations[dependent_card.suit].contains(dependent_card)
+                and not self.should_foundations_accept_card(dependent_card)):
+                return False
+        return True
+
+    # returns the cards (either 0 or 2 of them) that can be moved
+    # onto the given card
+    # for example: 4 of clubs returns 3 of hearts and 3 of diamonds
+    def get_dependent_cards(self, card):
+        if card.rank <= 1:
+            return []
+        else:
+            if card.color == 'black':
+                opposite_colored_suits = ['hearts', 'diamonds']
+            else:
+                opposite_colored_suits = ['clubs', 'spades']
+
+            return [Card(opposite_colored_suits[0], card.rank - 1),
+                    Card(opposite_colored_suits[1], card.rank - 1)]
+
+
     # automatically move cards to the foundations that should move there
     def auto_move(self):
         while True:
             has_moved = False
             for i in range(len(self.cells)):
                 try:
-                    if self.founds.should_accept(self.cells[i].view()):
+                    if self.should_foundations_accept_card(self.cells[i].view()):
                         self.cell_to_foundations(i)
                         has_moved = True
                 except EmptyOriginException:
                     pass
             for i in range(len(self.cascades)):
                 try:
-                    if self.founds.should_accept(self.cascades[i].view()):
+                    if self.should_foundations_accept_card(self.cascades[i].view()):
                         self.row_to_foundations(i)
                         has_moved = True
                 except EmptyOriginException:
