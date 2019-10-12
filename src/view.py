@@ -48,7 +48,7 @@ def display_game(window, board):
         window.addstr(char, attr)
 
     # show cascade, highlight cards that can move to foundations
-    def show_cascade(cascade, foundations):
+    def show_cascade(cascade, board):
         for card in cascade.cards:
             show_card(card, board.should_foundations_accept_card(card))
 
@@ -58,7 +58,7 @@ def display_game(window, board):
     for i, cascade in enumerate(board.cascades):
         window.move(i, 3)
         window.addstr('  {} '.format(i + 1))
-        show_cascade(cascade, board.foundations)
+        show_cascade(cascade, board)
     window.addstr('\n\nGame: {:6}\n'.format(board.seed))
 
 # display, in a vertical line, a highlighted index (location)
