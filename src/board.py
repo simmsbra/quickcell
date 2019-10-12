@@ -2,7 +2,7 @@ from random import randrange, Random
 
 from card import Card
 from cell import Cell
-from cascade import Cascade
+from cascade import Cascade, get_dependent_cards
 from foundation import Foundation
 from game_exception import EmptyOriginException, FullDestinationException, CompatibilityException, TooFewSlotsException
 
@@ -115,27 +115,11 @@ class Board:
 
         # accept only if none of the dependent cards may need to sit
         # in the cascades on the given card
-        for dependent_card in self.get_dependent_cards(card):
+        for dependent_card in get_dependent_cards(card):
             if (not self.foundations[dependent_card.suit].contains(dependent_card)
                 and not self.should_foundations_accept_card(dependent_card)):
                 return False
         return True
-
-    # returns the cards (either 0 or 2 of them) that can be moved
-    # onto the given card
-    # for example: 4 of clubs returns 3 of hearts and 3 of diamonds
-    def get_dependent_cards(self, card):
-        if card.rank <= 1:
-            return []
-        else:
-            if card.color == 'black':
-                opposite_colored_suits = ['hearts', 'diamonds']
-            else:
-                opposite_colored_suits = ['clubs', 'spades']
-
-            return [Card(opposite_colored_suits[0], card.rank - 1),
-                    Card(opposite_colored_suits[1], card.rank - 1)]
-
 
     # automatically move cards to the foundations that should move there
     def auto_move(self):

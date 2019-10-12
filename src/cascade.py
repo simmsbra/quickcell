@@ -1,4 +1,5 @@
 from game_exception import EmptyOriginException, CompatibilityException
+from card import Card
 
 
 class Cascade:
@@ -46,3 +47,18 @@ class Cascade:
             else:
                 break
         return index
+
+# returns the cards (either 0 or 2 of them) that can be moved
+# onto the given card
+# for example: 4 of clubs returns 3 of hearts and 3 of diamonds
+def get_dependent_cards(card):
+    if card.rank <= 1:
+        return []
+    else:
+        if card.color == 'black':
+            opposite_colored_suits = ['hearts', 'diamonds']
+        else:
+            opposite_colored_suits = ['clubs', 'spades']
+
+        return [Card(opposite_colored_suits[0], card.rank - 1),
+                Card(opposite_colored_suits[1], card.rank - 1)]
