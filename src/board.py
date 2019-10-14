@@ -2,7 +2,7 @@ from random import randrange, Random
 
 from card import Card
 from cell import Cell
-from cascade import Cascade, get_dependent_cards
+from cascade import Cascade, get_dependent_cards, is_dependent_card_of
 from foundation import Foundation
 from game_exception import EmptyOriginException, FullDestinationException, CompatibilityException, TooFewSlotsException
 
@@ -82,7 +82,7 @@ class Board:
                     break
         else:
             for i in range(movable_stack_index, len(from_row.cards)):
-                if from_row.cards[i].can_sit_on(to_row.cards[-1]):
+                if is_dependent_card_of(from_row.cards[i], to_row.cards[-1]):
                     movable_stack_index = i
                     break
             else:

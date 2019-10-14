@@ -16,7 +16,7 @@ class Cascade:
 
     # determine whether given card can be placed onto self
     def can_accept(self, card):
-        return self.is_empty() or card.can_sit_on(self.cards[-1])
+        return self.is_empty() or is_dependent_card_of(card, self.view())
 
     # return the card at index in self to see if it can be moved
     def view(self, index=-1):
