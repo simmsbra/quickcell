@@ -34,19 +34,36 @@ class Cascade:
     def is_empty(self):
         return len(self.cards) == 0
 
-    # return the index of the top of self's stack of cards that can sit on each other
-    # example: AA8732 would return the index of 3 if 3 and 2 were alternating colors
-    def stack_index(self):
+    # return the index of the top of self's stack of cards that can sit on
+    # each other and be moved as one unit
+    # example: (bottom)AA8432(top) would return the index of 3 if 4, 3, and 2
+    #                  012345
+    # had alternating colors
+    def movable_stack_index(self):
         if self.is_empty():
             return None
-        last = len(self.cards) - 1
-        index = last
-        for i in range(last - 1, -1, -1):
-            if self.cards[i + 1].can_sit_on(self.cards[i]):
-                index = i
+
+        if len(self.cards) == 1:
+            return 0
+
+        top_index = len(self.cards) - 1
+        movable_stack_index = top_index
+        # the child card is the card sitting on the parent card
+        for parent_index in range(top_index - 1, -1, -1):
+            child_index = parent_index + 1
+            if is_dependent_card_of(self.cards[child_index],
+                                    self.cards[parent_index]):
+                movable_stack_index = parent_index
             else:
                 break
-        return index
+        return movable_stack_index
+
+def is_dependent_card_of(child_card, parent_card):
+    for dependent_card in get_dependent_cards(parent_card):
+        if dependent_card == child_card:
+            return True
+
+    return False
 
 # returns the cards (either 0 or 2 of them) that can be moved
 # onto the given card

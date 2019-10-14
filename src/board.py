@@ -74,24 +74,24 @@ class Board:
 
         from_row.view()  # makes sure it's not empty
 
-        stack_index = from_row.stack_index()
+        movable_stack_index = from_row.movable_stack_index()
         if to_row.is_empty():
-            for i in range(stack_index, len(from_row.cards)):
+            for i in range(movable_stack_index, len(from_row.cards)):
                 if (len(from_row.cards) - i) <= self.calc_move_capacity(to_row):
-                    stack_index = i
+                    movable_stack_index = i
                     break
         else:
-            for i in range(stack_index, len(from_row.cards)):
+            for i in range(movable_stack_index, len(from_row.cards)):
                 if from_row.cards[i].can_sit_on(to_row.cards[-1]):
-                    stack_index = i
+                    movable_stack_index = i
                     break
             else:
                 raise CompatibilityException('The card(s) in the origin row cannot sit on the destination row.')
-            if self.calc_move_capacity(to_row) < (len(from_row.cards) - stack_index):
+            if self.calc_move_capacity(to_row) < (len(from_row.cards) - movable_stack_index):
                 raise TooFewSlotsException('There are not enough open slots to move that stack.')
-        tmp = from_row.view(stack_index)
+        tmp = from_row.view(movable_stack_index)
         to_row.accept(tmp)
-        from_row.remove(stack_index)
+        from_row.remove(movable_stack_index)
 
     # return how big of a stack of cards can be moved to given cascade
     def calc_move_capacity(self, to_row):
