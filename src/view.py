@@ -2,7 +2,6 @@ import curses
 
 
 def display_game(window, board):
-
     # displays either the foundation bank or the cell bank
     # where a "bank" is a group of 4 spots for cards or
     # stacks of cards

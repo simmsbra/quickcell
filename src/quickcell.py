@@ -150,7 +150,7 @@ def attempt_move(cmd, board):
 
 
 def print_help(window):
-    window.addstr("Press 'u' to undo.\n")
+    window.addstr("Press 'u' to undo a move.\n")
     window.addstr("Press 'n' to deal a new game.\n")
     window.addstr("\n")
 
