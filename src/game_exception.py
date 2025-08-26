@@ -14,6 +14,11 @@ class LetterCommandException(GameException):
         self.letter = letter
 
 
+class BackspaceCommandException(GameException):
+    """Raised when a backspace is read during command input"""
+    pass
+
+
 class InvalidCommandException(GameException):
     """Raised when a move command does not conform to the game rules or command structure"""
     pass

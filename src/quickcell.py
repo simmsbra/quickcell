@@ -3,7 +3,8 @@ import sys
 from copy import deepcopy
 
 from board import Board
-from game_exception import BoardException, LetterCommandException, InvalidCommandException
+from game_exception import BoardException, LetterCommandException, \
+    BackspaceCommandException, InvalidCommandException
 from view import display_game, show_cell_nums
 
 
@@ -87,15 +88,26 @@ def set_colors():
 # then return the valid command
 def input_command(window):
     curses.curs_set(1) # show cursor
-    try:
-        cmd = input_char(window)
-        if cmd == '0':
-            show_cell_nums(window)
-            cmd += input_char(window)
-        cmd += input_char(window)
-    except LetterCommandException as exc:
-        cmd = exc.letter
-
+    cmd = ''
+    while True:
+        try:
+            char = input_char(window)
+        except LetterCommandException as exc:
+            cmd = exc.letter
+            break
+        except BackspaceCommandException as exc:
+            if len(cmd) > 0:
+                cmd = cmd[:-1]
+                cursor_pos = curses.getsyx()
+                window.delch(cursor_pos[0], cursor_pos[1] - 1)
+            continue
+        cmd += char
+        if cmd[0] == '0':
+            if len(cmd) == 3:
+                break
+        else:
+            if len(cmd) == 2:
+                break
     curses.curs_set(0) # hide cursor
     return cmd
 
@@ -109,6 +121,8 @@ def input_char(window):
             sys.exit()
         if char in 'qhun':
             raise LetterCommandException(char)
+        if char == 'KEY_BACKSPACE':
+            raise BackspaceCommandException
         if char.isdecimal():
             break
     window.addstr(char)
