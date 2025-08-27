@@ -31,3 +31,14 @@ The last question of section 2, about cards automatically moving home, was parti
 
 Thank you Dan Fletcher for writing the article [Freecell PowerMoves Explained](http://www.solitairecentral.com/articles/FreecellPowerMovesExplained.html).
 The formula for determining the longest movable card sequence is implemented here.
+
+## Roadmap
+0.5.0
+- [ ] Be able to save and load games
+- [x] Be able to use backspace to edit a partially entered move command
+- [ ] Be able to redo a move
+- [ ] The previous move command is part of the undo history
+0.6.0
+- [ ] Notify user if the current deal is unwinnable
+0.6.1
+- [ ] To prevent crashes in tiny windows, add error handling to window.addstr()
