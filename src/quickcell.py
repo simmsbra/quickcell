@@ -3,8 +3,7 @@ import sys
 from copy import deepcopy
 
 from board import Board
-from game_exception import BoardException, LetterCommandException, \
-    BackspaceCommandException, InvalidCommandException
+from game_exception import BoardException, InvalidCommandException
 from view import display_game, show_cell_nums
 
 
@@ -58,8 +57,8 @@ def main(stdscr):
             if len(history) > 1:
                 deal = deepcopy(history[-2])
                 history.pop()
-
         else:
+            # it's a move command
             try:
                 validate(cmd)
                 attempt_move(cmd, deal)
@@ -84,35 +83,36 @@ def set_colors():
     curses.init_pair(7, curses.COLOR_CYAN, curses.COLOR_BLACK)
 
 
-# get user input until a valid command is constructed
-# then return the valid command
+# get user input until a valid command is constructed, then return that command
 def input_command(window):
     curses.curs_set(1) # show cursor
     cmd = ''
     while True:
-        try:
-            char = input_char(window)
-        except LetterCommandException as exc:
-            cmd = exc.letter
-            break
-        except BackspaceCommandException as exc:
+        char = input_char(window)
+        if char == 'KEY_BACKSPACE':
             if len(cmd) > 0:
                 cmd = cmd[:-1]
                 cursor_pos = curses.getsyx()
                 window.delch(cursor_pos[0], cursor_pos[1] - 1)
             continue
-        cmd += char
-        if cmd[0] == '0':
-            if len(cmd) == 3:
-                break
+        if char.isdecimal():
+            # it's part of a move command
+            cmd += char
+            if cmd[0] == '0':
+                if len(cmd) == 3:
+                    break
+            else:
+                if len(cmd) == 2:
+                    break
         else:
-            if len(cmd) == 2:
-                break
+            # it's a letter command
+            cmd = char
+            break
     curses.curs_set(0) # hide cursor
     return cmd
 
 
-# get valid characters (may include letters) from user; echoing them
+# get a valid character from user, echoing it if part of a move command
 def input_char(window):
     while True:
         try:
@@ -120,12 +120,12 @@ def input_char(window):
         except KeyboardInterrupt:
             sys.exit()
         if char in 'qhun':
-            raise LetterCommandException(char)
-        if char == 'KEY_BACKSPACE':
-            raise BackspaceCommandException
-        if char.isdecimal():
             break
-    window.addstr(char)
+        if char == 'KEY_BACKSPACE':
+            break
+        if char.isdecimal():
+            window.addstr(char)
+            break
     return char
 
 

@@ -3,22 +3,6 @@ class GameException(Exception):
     pass
 
 
-class LetterCommandException(GameException):
-    """Raised when a letter command is read during command input
-
-    Attribute:
-        letter :: the letter command that the user entered
-    """
-
-    def __init__(self, letter):
-        self.letter = letter
-
-
-class BackspaceCommandException(GameException):
-    """Raised when a backspace is read during command input"""
-    pass
-
-
 class InvalidCommandException(GameException):
     """Raised when a move command does not conform to the game rules or command structure"""
     pass
