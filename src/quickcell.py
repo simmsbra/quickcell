@@ -2,9 +2,9 @@ import curses
 import sys
 from copy import deepcopy
 
-from board import Board
+from board import Board, NUM_OF_CELLS
 from game_exception import BoardException, InvalidCommandException
-from view import display_game, show_cell_nums
+from view import display_game, show_cell_nums, hide_cell_nums
 
 
 # prepare game and run the main loop
@@ -30,8 +30,7 @@ def main(stdscr):
         stdscr.addstr("Press 'q' to quit.\n")
         stdscr.addstr("Press 'h' for help.\n")
         # previous command displays with a fixed width of 3
-        stdscr.addstr(">>{:>3} ".format(prev_cmd))
-        stdscr.addstr('>')
+        stdscr.addstr(">>{:>3} >".format(prev_cmd))
 
         cmd = input_command(stdscr)
         if cmd == 'q':
@@ -91,14 +90,18 @@ def input_command(window):
         char = input_char(window)
         if char == 'KEY_BACKSPACE':
             if len(cmd) > 0:
-                cmd = cmd[:-1]
                 cursor_pos = curses.getsyx()
                 window.delch(cursor_pos[0], cursor_pos[1] - 1)
+                deleted_char = cmd[-1]
+                cmd = cmd[:-1]
+                if deleted_char == '0':
+                    hide_cell_nums(window)
             continue
         if char.isdecimal():
             # it's part of a move command
             cmd += char
             if cmd[0] == '0':
+                show_cell_nums(window)
                 if len(cmd) == 3:
                     break
             else:
@@ -132,7 +135,7 @@ def input_char(window):
 # makes sure a move command (2-3 digits) respects the rules
 def validate(cmd):
     if cmd[0] == '0':
-        if not (1 <= int(cmd[1]) <= 4):
+        if not (1 <= int(cmd[1]) <= NUM_OF_CELLS):
             raise InvalidCommandException(cmd[1] + ' is not a valid cell number.')
         if cmd[2] == '0':
             raise InvalidCommandException('You cannot move from a cell to a cell.')

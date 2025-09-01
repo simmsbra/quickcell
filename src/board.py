@@ -7,6 +7,8 @@ from foundation import Foundation
 from game_exception import EmptyOriginException, FullDestinationException, CompatibilityException, TooFewSlotsException
 
 
+NUM_OF_CELLS = 4
+
 class Board:
     def __init__(self, seed=None):
         if seed is None:
@@ -37,7 +39,7 @@ class Board:
             self.foundations[suit] = (Foundation(suit))
 
         self.cells = []
-        for i in range(4):
+        for i in range(NUM_OF_CELLS):
             self.cells.append(Cell())
 
     def move(self, origin, destination):

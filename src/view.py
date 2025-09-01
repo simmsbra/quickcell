@@ -1,4 +1,5 @@
 import curses
+from board import NUM_OF_CELLS
 
 
 def display_game(window, board):
@@ -7,15 +8,9 @@ def display_game(window, board):
     # stacks of cards
     def show_bank(bank, bank_type):
         pos = window.getyx()
+        _show_bank_labels(window, '0' if bank_type == 'cells' else '9', len(bank))
         for i, unit in enumerate(bank):
-            window.move(pos[0] + i, pos[1])
-            if i == 0:
-                label = '0 ' if bank_type == 'cells' else '9 '
-            elif i == 3:
-                label = '┗ '
-            else:
-                label = '┃ '
-            window.addstr(label)
+            window.move(pos[0] + i, pos[1] + 2) # +2 to account for label width
             if bank_type == 'cells':
                 show_cell(unit)
             else: # it's a foundation
@@ -52,7 +47,7 @@ def display_game(window, board):
             show_card(card, board.should_foundations_accept_card(card))
 
     show_bank(board.cells, 'cells')
-    window.move(4, 0)
+    window.move(NUM_OF_CELLS, 0)
     show_bank(board.foundations, 'foundations')
     for i, cascade in enumerate(board.cascades):
         window.move(i, 3)
@@ -60,10 +55,30 @@ def display_game(window, board):
         show_cascade(cascade, board)
     window.addstr('\n\nGame: {:6}\n'.format(board.seed))
 
+# note: does not restore cursor position
+def _show_bank_labels(window, bank_char, number_of_units):
+    pos = window.getyx()
+    for i in range(number_of_units):
+        window.move(pos[0] + i, pos[1])
+        if i == 0:
+            label = bank_char
+        elif i == (number_of_units - 1):
+            label = '┗'
+        else:
+            label = '┃'
+        window.addstr(f"{label} ")
+
 # display, in a vertical line, a highlighted index (location)
 # number for each cell
 def show_cell_nums(window):
     pos = window.getyx()
-    for i in range(4):
+    for i in range(NUM_OF_CELLS):
         window.addstr(i, 0, str(i + 1), curses.A_REVERSE)
+    window.move(*pos)
+
+def hide_cell_nums(window):
+    # redraw the normal cell bank labels
+    pos = window.getyx()
+    window.move(0, 0)
+    _show_bank_labels(window, '0', NUM_OF_CELLS)
     window.move(*pos)
