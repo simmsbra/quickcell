@@ -1,7 +1,7 @@
 # QuickCell
 QuickCell is an implementation of the single-player card game [FreeCell](https://en.wikipedia.org/wiki/FreeCell). QuickCell places the focus on the actual strategy of the game by automating tedious moves, requiring minimal input, and providing a highlighting system.
 
-![Demo](https://raw.githubusercontent.com/simmsbra/quickcell/master/demo.gif)
+![Demo](./demo.gif)
 
 ## Features
 - *Smart Highlighting*: Cards that are needed to advance will be highlit for quick spotting.
